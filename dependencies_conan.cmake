@@ -4,9 +4,11 @@ set(DEPENDENCIES_CMAKE_FILE_TEST ${CMAKE_CURRENT_LIST_DIR}/dependencies_tests_co
 message(STATUS "Aegisub Build: Loading dependencies using Conan...")
 include(${CMAKE_CURRENT_LIST_DIR}/conan.cmake)
 
-conan_add_remote(NAME bincrafters URL https://api.bintray.com/conan/bincrafters/public-conan)
-conan_add_remote(NAME charliejiang URL https://api.bintray.com/conan/charliejiang/conan)
-conan_add_remote(NAME h4mster URL https://api.bintray.com/conan/h4mster/conan)
+conan_check(REQUIRED)
+
+conan_add_remote(NAME bincrafters URL "https://api.bintray.com/conan/bincrafters/public-conan")
+conan_add_remote(NAME charliejiang URL "https://api.bintray.com/conan/charliejiang/conan")
+conan_add_remote(NAME h4mster URL "https://api.bintray.com/conan/h4mster/conan")
 
 set(AEGISUB_CONAN_DEPS
     "libpng/1.6.37"
@@ -125,16 +127,17 @@ if(WITH_FFMS2)
     list(APPEND AEGISUB_CONAN_OPTIONS ${FFMS2_OPTIONS})
 endif()
 
-if(WITH_ALSA)
-    list(APPEND AEGISUB_CONAN_DEPS libalsa/1.1.9@conan/stable)
+if(WITH_FFTW3)
+    list(APPEND AEGISUB_CONAN_DEPS fftw/3.3.8@bincrafters/stable)
+    list(APPEND AEGISUB_CONAN_IMPORT_TARGETS CONAN_PKG::fftw)
 endif()
 
-if(WITH_OPENAL)
+if(WITH_ALSA)
     list(APPEND AEGISUB_CONAN_DEPS libalsa/1.1.9@conan/stable)
     list(APPEND AEGISUB_CONAN_IMPORT_TARGETS CONAN_PKG::libalsa)
 endif()
 
-if(WITH_FFTW3)
+if(WITH_OPENAL)
     list(APPEND AEGISUB_CONAN_DEPS openal/1.19.0@bincrafters/stable)
     list(APPEND AEGISUB_CONAN_IMPORT_TARGETS CONAN_PKG::openal)
 endif()
