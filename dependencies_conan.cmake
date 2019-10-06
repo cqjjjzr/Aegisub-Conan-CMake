@@ -1,3 +1,6 @@
+message(STATUS "Aegisub Build: Changing unit test dependency management to Conan...")
+set(DEPENDENCIES_CMAKE_FILE_TEST ${CMAKE_CURRENT_LIST_DIR}/dependencies_tests_conan.cmake)
+
 message(STATUS "Aegisub Build: Loading dependencies using Conan...")
 include(${CMAKE_CURRENT_LIST_DIR}/conan.cmake)
 
@@ -6,10 +9,12 @@ conan_add_remote(NAME charliejiang URL https://api.bintray.com/conan/charliejian
 conan_add_remote(NAME h4mster URL https://api.bintray.com/conan/h4mster/conan)
 
 set(AEGISUB_CONAN_DEPS
+    "libpng/1.6.37"
+    "zlib/1.2.11"
     "libass/0.14.0@charliejiang/stable"
     "boost/1.71.0@conan/stable"
     "icu/64.2@bincrafters/stable"
-    "wxwidgets/3.1.2@bincrafters/stable"
+    "wxwidgets/3.1.2@charliejiang/stable" # TODO : Wait for bincrafter guys to merge https://github.com/bincrafters/conan-wxwidgets/pull/16
     "luajit/2.0.5@charliejiang/stable"
     "luabins/0.3@h4mster/stable"
     "libiconv/1.15@bincrafters/stable"
@@ -120,9 +125,18 @@ if(WITH_FFMS2)
     list(APPEND AEGISUB_CONAN_OPTIONS ${FFMS2_OPTIONS})
 endif()
 
+if(WITH_ALSA)
+    list(APPEND AEGISUB_CONAN_DEPS libalsa/1.1.9@conan/stable)
+endif()
+
+if(WITH_OPENAL)
+    list(APPEND AEGISUB_CONAN_DEPS libalsa/1.1.9@conan/stable)
+    list(APPEND AEGISUB_CONAN_IMPORT_TARGETS CONAN_PKG::libalsa)
+endif()
+
 if(WITH_FFTW3)
-    list(APPEND AEGISUB_CONAN_DEPS fftw/3.3.8@bincrafters/stable)
-    list(APPEND AEGISUB_CONAN_IMPORT_TARGETS CONAN_PKG::fftw)
+    list(APPEND AEGISUB_CONAN_DEPS openal/1.19.0@bincrafters/stable)
+    list(APPEND AEGISUB_CONAN_IMPORT_TARGETS CONAN_PKG::openal)
 endif()
 
 if(WITH_HUNSPELL)
@@ -134,6 +148,15 @@ endif()
 if(WITH_UCHARDET)
     list(APPEND AEGISUB_CONAN_DEPS uchardet/0.0.6@charliejiang/stable)
     list(APPEND AEGISUB_CONAN_IMPORT_TARGETS CONAN_PKG::uchardet)
+endif()
+
+if(WITH_PORTAUDIO)
+    list(APPEND AEGISUB_CONAN_DEPS "portaudio/v190600.20161030@bincrafters/stable")
+    list(APPEND AEGISUB_CONAN_IMPORT_TARGETS CONAN_PKG::portaudio)
+endif()
+
+if(WITH_TEST)
+    list(APPEND AEGISUB_CONAN_DEPS "gtest/1.8.1")
 endif()
 
 message(STATUS "Aegisub Build: Settings collected, executing Conan...")
@@ -164,18 +187,6 @@ find_package(OpenGL REQUIRED)
 target_include_directories(Aegisub PRIVATE ${OPENGL_INCLUDE_DIR})
 target_link_libraries(Aegisub ${OPENGL_LIBRARIES})
 
-if(WITH_ALSA)
-    find_package(ALSA)
-    if(NOT ALSA_FOUND)
-        set(WITH_ALSA OFF CACHE BOOL "Enable ALSA support" FORCE)
-    endif()
-endif()
-if(WITH_ALSA)
-    target_compile_definitions(Aegisub PRIVATE "WITH_ALSA")
-    target_include_directories(Aegisub PRIVATE ${ALSA_INCLUDE_DIRS})
-    target_link_libraries(Aegisub ${ALSA_LIBRARIES})
-endif()
-
 if(WITH_AVISYNTH)
     find_package(AviSynth)
     if(NOT AviSynth_FOUND)
@@ -199,17 +210,6 @@ if(WITH_LIBPULSE)
     target_link_libraries(Aegisub ${PULSEAUDIO_LIBRARY})
 endif()
 
-if(WITH_OPENAL)
-    find_package(OpenAL)
-    if(NOT OPENAL_FOUND)
-        set(WITH_OPENAL OFF CACHE BOOL "Enable OpenAL support" FORCE)
-    endif()
-endif()
-if(WITH_OPENAL)
-    target_include_directories(Aegisub PRIVATE ${OPENAL_INCLUDE_DIR})
-    target_link_libraries(Aegisub ${OPENAL_LIBRARY})
-endif()
-
 if(WITH_OSS)
     find_package(OSS)
     if(NOT OSS_FOUND)
@@ -218,17 +218,6 @@ if(WITH_OSS)
 endif()
 if(WITH_OSS)
     target_include_directories(Aegisub PRIVATE ${OSS_INCLUDE_DIRS})
-endif()
-
-if(WITH_PORTAUDIO)
-    find_package(PortAudio)
-    if(NOT PortAudio_FOUND)
-        set(WITH_PORTAUDIO OFF CACHE BOOL "Enable PortAudio support" FORCE)
-    endif()
-endif()
-if(WITH_PORTAUDIO)
-    target_include_directories(Aegisub PRIVATE ${PortAudio_INCLUDE_DIRS})
-    target_link_libraries(Aegisub ${PortAudio_LIBRARIES})
 endif()
 
 message(STATUS "Aegisub Build: Dependencies resolved.")
