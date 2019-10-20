@@ -1,6 +1,12 @@
 message(STATUS "Aegisub Build: Changing unit test dependency management to Conan...")
 set(DEPENDENCIES_CMAKE_FILE_TEST ${CMAKE_CURRENT_LIST_DIR}/dependencies_tests_conan.cmake)
 
+# this must be before the conan
+if(APPLE) # sooooooooo APPLE
+    find_package(Iconv REQUIRED)
+    target_link_libraries(libaegisub ${Iconv_LIBRARIES}) # LINK ONLY
+endif()
+
 message(STATUS "Aegisub Build: Loading dependencies using Conan...")
 include(${CMAKE_CURRENT_LIST_DIR}/conan.cmake)
 
@@ -14,12 +20,12 @@ set(AEGISUB_CONAN_DEPS
     "libpng/1.6.37"
     "zlib/1.2.11"
     "libass/0.14.0@charliejiang/stable"
-    "boost/1.71.0@conan/stable"
+    "boost/1.71.0@charliejiang/stable"
     "icu/64.2@bincrafters/stable"
     "wxwidgets/3.1.2@charliejiang/stable" # TODO : Wait for bincrafter guys to merge https://github.com/bincrafters/conan-wxwidgets/pull/16
     "luajit/2.0.5@charliejiang/stable"
     "luabins/0.3@h4mster/stable"
-    "libiconv/1.15@bincrafters/stable"
+    "libiconv/1.15"
     )
 set(LIBAEGISUB_CONAN_IMPORT_TARGETS
     CONAN_PKG::libiconv
@@ -28,6 +34,7 @@ set(LIBAEGISUB_CONAN_IMPORT_TARGETS
     CONAN_PKG::wxwidgets
     CONAN_PKG::luajit)
 set(AEGISUB_CONAN_IMPORT_TARGETS
+    CONAN_PKG::libiconv
     CONAN_PKG::boost
     CONAN_PKG::icu
     CONAN_PKG::libass
