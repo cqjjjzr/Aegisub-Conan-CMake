@@ -22,7 +22,7 @@ set(AEGISUB_CONAN_DEPS
     "libass/0.14.0@charliejiang/stable"
     "boost/1.71.0@charliejiang/stable"
     "icu/64.2@bincrafters/stable"
-    "wxwidgets/3.1.2@charliejiang/stable" # TODO : Wait for bincrafter guys to merge https://github.com/bincrafters/conan-wxwidgets/pull/16
+    "wxwidgets/nightly-20191022-5d8fdcb8@charliejiang/stable" # TODO : Wait for bincrafter guys to merge https://github.com/bincrafters/conan-wxwidgets/pull/16
     "luajit/2.0.5@charliejiang/stable"
     "luabins/0.3@h4mster/stable"
     "libiconv/1.15"
@@ -74,6 +74,7 @@ set(wxWidgets_OPTIONS
     wxwidgets:debugreport=False
     wxwidgets:ribbon=False
     wxwidgets:webview=False
+    wxwidgets:custom_disables="wxUSE_SOUND"
     )
 if(LINUX)
     list(APPEND wxWidgets_OPTIONS wxwidgets:cairo=False)
