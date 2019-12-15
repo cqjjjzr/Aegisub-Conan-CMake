@@ -27,6 +27,7 @@ set(AEGISUB_CONAN_DEPS
     "luabins/0.3@h4mster/stable"
     "libiconv/1.15"
     "expat/2.2.8"
+    "freetype/2.10.1"
     )
 set(LIBAEGISUB_CONAN_IMPORT_TARGETS
     CONAN_PKG::libiconv
