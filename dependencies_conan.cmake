@@ -28,13 +28,15 @@ set(AEGISUB_CONAN_DEPS
     "libiconv/1.15"
     "expat/2.2.8"
     "freetype/2.10.1"
+    "nlohmann_json/3.7.3"
     )
 set(LIBAEGISUB_CONAN_IMPORT_TARGETS
     CONAN_PKG::libiconv
     CONAN_PKG::boost
     CONAN_PKG::icu
     CONAN_PKG::wxwidgets
-    CONAN_PKG::luajit)
+    CONAN_PKG::luajit
+    CONAN_PKG::nlohmann_json)
 set(AEGISUB_CONAN_IMPORT_TARGETS
     CONAN_PKG::libiconv
     CONAN_PKG::boost
@@ -42,7 +44,8 @@ set(AEGISUB_CONAN_IMPORT_TARGETS
     CONAN_PKG::libass
     CONAN_PKG::wxwidgets
     CONAN_PKG::luajit
-    CONAN_PKG::luabins)
+    CONAN_PKG::luabins
+    CONAN_PKG::nlohmann_json)
 
 set(ICU_OPTIONS icu:data_packaging=static)
 
@@ -66,11 +69,11 @@ set(wxWidgets_OPTIONS
     wxwidgets:xml=True
     wxwidgets:html=True
     wxwidgets:xrc=True
+    wxwidgets:aui=True
 
     wxwidgets:jpeg=off
     wxwidgets:tiff=off
     wxwidgets:secretstore=False
-    wxwidgets:aui=False
     wxwidgets:mediactrl=False
     wxwidgets:propgrid=False
     wxwidgets:debugreport=False
