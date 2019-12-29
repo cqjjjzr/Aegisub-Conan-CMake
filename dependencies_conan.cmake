@@ -180,7 +180,7 @@ message(STATUS "Aegisub Build: Settings collected, executing Conan...")
 set(CONAN_IMPORTS
    "bin, *.dll -> ."
    "lib, *.dylib -> ."
-   "lib, *.so -> ."
+   "lib, *.so* -> ."
 )
 
 conan_cmake_run(REQUIRES ${AEGISUB_CONAN_DEPS}
