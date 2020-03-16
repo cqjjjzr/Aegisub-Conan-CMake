@@ -14,7 +14,7 @@ conan_check(REQUIRED)
 
 conan_add_remote(NAME bincrafters URL "https://api.bintray.com/conan/bincrafters/public-conan")
 conan_add_remote(NAME charliejiang URL "https://api.bintray.com/conan/charliejiang/conan")
-conan_add_remote(NAME h4mster URL "https://api.bintray.com/conan/h4mster/conan")
+conan_add_remote(NAME h4m5ter URL "https://api.bintray.com/conan/h4m5ter/conan")
 
 set(AEGISUB_CONAN_DEPS
     "libpng/1.6.37"
@@ -24,7 +24,7 @@ set(AEGISUB_CONAN_DEPS
     "icu/64.2@bincrafters/stable"
     "wxwidgets/3.1.3@bincrafters/stable" # TODO : Wait for bincrafter guys to merge https://github.com/bincrafters/conan-wxwidgets/pull/16
     "luajit/2.0.5@charliejiang/stable"
-    "luabins/0.3@h4mster/stable"
+    "luabins/0.3@h4m5ter/stable"
     "libiconv/1.15"
     "expat/2.2.8"
     "freetype/2.10.1"
